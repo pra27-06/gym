@@ -1,6 +1,8 @@
 const express = require('express');
 const { initDb } = require('./db');
 const authRoutes = require('./routes/auth');
+const { router: sessionsRoutes } = require('./routes/sessions');
+const bookingsRoutes = require('./routes/bookings');
 const { authenticate, requireAdmin } = require('./middleware/auth');
 
 const app = express();
@@ -10,8 +12,11 @@ app.use(express.json());
 // Initialize DB schema
 initDb();
 
-// Public auth routes
+// Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/sessions', sessionsRoutes);
+app.use('/api/bookings', bookingsRoutes);
+
 
 // Protected test route for admin check verification
 app.get('/api/admin/ping', authenticate, requireAdmin, (req, res) => {
