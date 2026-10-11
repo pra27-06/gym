@@ -2,17 +2,21 @@ services:
   - type: web
     name: gymflow
     runtime: node
-    plan: free
+    plan: starter
     region: oregon
     branch: main
     buildCommand: npm install
     startCommand: npm run seed && npm start
+    disk:
+      name: gymflow-data
+      mountPath: /var/data
+      sizeGB: 1
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
         value: 10000
       - key: DB_PATH
-        value: ./gym.db
+        value: /var/data/gym.db
       - key: JWT_SECRET
         generateValue: true

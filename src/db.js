@@ -2,7 +2,15 @@ const Database = require('better-sqlite3');
 const path = require('path');
 require('dotenv').config();
 
+const fs = require('fs');
 const dbPath = process.env.DB_PATH || path.join(__dirname, '..', 'gym.db');
+
+// Ensure database directory exists (vital for persistent disk mount paths like /var/data)
+const dbDir = path.dirname(dbPath);
+if (!fs.existsSync(dbDir)) {
+  fs.mkdirSync(dbDir, { recursive: true });
+}
+
 const db = new Database(dbPath);
 
 // Enable foreign key constraints
