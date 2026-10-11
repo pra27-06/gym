@@ -3,6 +3,7 @@ const { initDb } = require('./db');
 const authRoutes = require('./routes/auth');
 const { router: sessionsRoutes } = require('./routes/sessions');
 const bookingsRoutes = require('./routes/bookings');
+const { router: adminRoutes } = require('./routes/admin');
 const { authenticate, requireAdmin } = require('./middleware/auth');
 
 const app = express();
@@ -16,7 +17,7 @@ initDb();
 app.use('/api/auth', authRoutes);
 app.use('/api/sessions', sessionsRoutes);
 app.use('/api/bookings', bookingsRoutes);
-
+app.use('/api/admin', adminRoutes);
 
 // Protected test route for admin check verification
 app.get('/api/admin/ping', authenticate, requireAdmin, (req, res) => {
