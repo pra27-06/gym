@@ -7,8 +7,15 @@ function generateShortCode() {
   return crypto.randomBytes(4).toString('hex').slice(0, 6).toUpperCase();
 }
 
-function seed() {
+function seed(force = false) {
   initDb();
+
+  const isForced = force || process.argv.includes('--force') || process.env.NODE_ENV === 'test';
+  const existingUsers = db.prepare('SELECT COUNT(*) as count FROM users').get();
+  if (!isForced && existingUsers && existingUsers.count > 0) {
+    console.log('Database already initialized with data. Skipping destructive re-seed.');
+    return;
+  }
 
   // Clear existing data in reverse order of foreign keys
   db.exec(`
