@@ -9,6 +9,8 @@ const { authenticate, requireAdmin } = require('./middleware/auth');
 const app = express();
 
 app.use(express.json());
+const path = require('path');
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Initialize DB schema
 initDb();
