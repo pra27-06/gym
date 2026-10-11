@@ -22,7 +22,7 @@ The frontend is a single-page app with protected client-side routes, optimistic 
 ## Assumptions
 1. **Waitlist Expiration**: If a session starts, waitlisted members who were not promoted remain on record but cannot be promoted, as promotions and bookings are barred once a session start time has passed.
 2. **Gym Timezone**: All session dates and start hours represent the gym's local operational timezone.
-3. **Check-in Codes**: Codes are 6-character uppercase hexadecimal strings (e.g., `7XKP2Q`) generated cryptographically to prevent guessing.
+3. **Check-in Codes**: Codes are 6-character uppercase hexadecimal strings (e.g., `7A4B2C`) generated cryptographically to prevent guessing.
 4. **Waitlist Re-entry**: A member who leaves a waitlist can re-join later at the back of the queue, but cannot hold duplicate entries simultaneously.
 5. **Admin Scope**: Admins cannot be created via user registration; they are seeded or created directly in the database.
 
@@ -98,4 +98,4 @@ Or run individually:
 Configured via `render.yaml` for zero-configuration deployment on Render:
 - **Build Command**: `npm install`
 - **Start Command**: `npm run seed && npm start`
-- **Database Persistence Note**: On Render's free tier, filesystem storage persists while the service is active. If spun down due to 15 minutes of inactivity, the start command uses our idempotent seed check (`src/seed.js`) to guarantee the database always boots cleanly with required test accounts and the full 20/20 session.
+- **Database Persistence Note**: Render Free web services use ephemeral local filesystem storage. Any SQLite data stored locally in `./gym.db` may be lost when the instance restarts, redeploys, or sleeps after inactivity. The idempotent seed script (`src/seed.js`) automatically populates the required demo data (admin, members, and the full 20/20 session) whenever the database file is empty or recreated, but it cannot recover lost user registrations or bookings created during previous runtime sessions. A permanent production deployment requires a persistent database service (e.g., PostgreSQL on Supabase/Neon or a persistent disk).
