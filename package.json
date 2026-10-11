@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "seed": "node src/seed.js",
+    "test": "node test/db-test.js && node test/auth-test.js && node test/sessions-booking-test.js && node test/checkin-test.js && node test/frontend-test.js && node test/e2e-test.js"
   },
   "keywords": [],
   "author": "",
