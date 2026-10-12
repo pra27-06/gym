@@ -33,7 +33,7 @@ export default function App() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--obsidian-deep)' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--obsidian)' }}>
       {/* Top Navigation */}
       <Navbar
         currentPage={currentPage}
@@ -76,9 +76,9 @@ export default function App() {
           user?.role === 'admin' ? (
             <AdminPage />
           ) : (
-            <div style={{ maxWidth: '600px', margin: '4rem auto', textAlign: 'center', padding: '2rem', background: 'var(--charcoal-card)', borderRadius: '16px', border: '1px solid var(--border-subtle)' }}>
-              <h2 style={{ color: 'var(--status-crimson)', marginBottom: '1rem' }}>Restricted Area</h2>
-              <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem' }}>You must be logged in as an administrator to access the gym console.</p>
+            <div style={{ maxWidth: '540px', margin: '4rem auto', textAlign: 'center', padding: '2.5rem 2rem', background: 'var(--charcoal-card)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-medium)' }}>
+              <h2 className="font-heading" style={{ color: '#f87171', marginBottom: '0.75rem', fontSize: '1.4rem', fontWeight: 800 }}>Restricted Staff Console</h2>
+              <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem', fontSize: '0.9rem' }}>You must be logged in as gym operations staff or administrator to access this area.</p>
               <button className="btn-primary" onClick={() => handleNavigate('login-register')}>Sign In with Staff Account</button>
             </div>
           )
@@ -86,53 +86,53 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer style={{ borderTop: '1px solid var(--border-subtle)', background: 'var(--charcoal-card)', padding: '3rem 1.5rem 2rem 1.5rem', marginTop: 'auto' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '2rem' }}>
+      <footer style={{ borderTop: '1px solid var(--border-subtle)', background: 'var(--graphite-950)', padding: '3.5rem 1.5rem 2.5rem 1.5rem', marginTop: 'auto' }}>
+        <div style={{ maxWidth: '1160px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '2.5rem' }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.5rem' }}>
-              <div style={{ width: '28px', height: '28px', borderRadius: '6px', background: 'var(--neon-lime)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Zap size={16} color="#08090b" strokeWidth={3} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
+              <div style={{ width: '26px', height: '26px', borderRadius: '5px', background: 'var(--neon-lime)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Zap size={15} color="#08090b" strokeWidth={3} />
               </div>
-              <span style={{ fontFamily: 'var(--font-heading)', fontSize: '1.15rem', fontWeight: 900, letterSpacing: '-0.02em', color: 'var(--pure-white)' }}>
+              <span className="font-heading" style={{ fontSize: '1.15rem', fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--pure-white)' }}>
                 GYM<span style={{ color: 'var(--neon-lime)' }}>FLOW</span>
               </span>
             </div>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', maxWidth: '380px' }}>
-              Engineered for athletic performance. High-concurrency gym slot reservations with real-time WebSockets and automated FIFO waitlist dispatch.
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', maxWidth: '360px', lineHeight: 1.6 }}>
+              Boutique gym scheduling infrastructure. Capped 20-athlete session floors, real-time WebSocket seat counters, and automated FIFO waitlist promotion.
             </p>
           </div>
 
-          <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', fontSize: '0.85rem' }}>
+          <div style={{ display: 'flex', gap: '3rem', flexWrap: 'wrap', fontSize: '0.85rem' }}>
             <div>
-              <div style={{ fontWeight: 800, color: 'var(--pure-white)', marginBottom: '0.75rem', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '0.08em' }}>
-                Architecture
+              <div style={{ fontWeight: 700, color: 'var(--pure-white)', marginBottom: '0.75rem', textTransform: 'uppercase', fontSize: '0.72rem', letterSpacing: '0.06em' }}>
+                Platform Stack
               </div>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, color: 'var(--text-muted)', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                <li>React 19 + Vite Frontend</li>
-                <li>Node.js / Express Backend</li>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, color: 'var(--text-muted)', display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+                <li>React 19 + Vite Client</li>
+                <li>Express REST Backend</li>
                 <li>SQLite ACID Transactions</li>
-                <li>Socket.IO Real-Time Stream</li>
+                <li>Socket.IO Event Stream</li>
               </ul>
             </div>
 
             <div>
-              <div style={{ fontWeight: 800, color: 'var(--pure-white)', marginBottom: '0.75rem', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '0.08em' }}>
-                Policies
+              <div style={{ fontWeight: 700, color: 'var(--pure-white)', marginBottom: '0.75rem', textTransform: 'uppercase', fontSize: '0.72rem', letterSpacing: '0.06em' }}>
+                Floor Policies
               </div>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, color: 'var(--text-muted)', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                <li>20 Athletes Per Session</li>
-                <li>60-Minute Slots</li>
-                <li>Instant FIFO Waitlist</li>
-                <li>Turnstile Code Verification</li>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, color: 'var(--text-muted)', display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+                <li>Strict 20-Seat Cap</li>
+                <li>60-Minute Windows</li>
+                <li>Automated FIFO Queue</li>
+                <li>Turnstile Code Validation</li>
               </ul>
             </div>
           </div>
         </div>
 
-        <div style={{ maxWidth: '1200px', margin: '2rem auto 0 auto', paddingTop: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', color: 'var(--text-dim)', fontSize: '0.8rem' }}>
-          <div>© {new Date().getFullYear()} GYMFLOW Platform. All rights reserved.</div>
+        <div style={{ maxWidth: '1160px', margin: '2.5rem auto 0 auto', paddingTop: '1.5rem', borderTop: '1px solid var(--border-subtle)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', color: 'var(--text-dim)', fontSize: '0.78rem' }}>
+          <div>© {new Date().getFullYear()} GYMFLOW Platform. High-Performance Athletic Booking.</div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-            Next-Gen Athletic Booking System
+            Crafted for Technical Interview Walkthrough
           </div>
         </div>
       </footer>

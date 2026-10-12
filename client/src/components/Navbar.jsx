@@ -27,15 +27,14 @@ export default function Navbar({ currentPage, activePage, onNavigate, setActiveP
 
   const current = currentPage || activePage || 'landing';
   const isPassesActive = current === 'bookings' || current === 'my-bookings';
-  const isAuthActive = current === 'login-register' || current === 'auth';
 
   return (
     <header style={{
       position: 'sticky',
       top: 0,
       zIndex: 100,
-      backgroundColor: 'rgba(13, 15, 20, 0.95)',
-      backdropFilter: 'blur(16px)',
+      backgroundColor: 'rgba(11, 12, 16, 0.94)',
+      backdropFilter: 'blur(12px)',
       borderBottom: '1px solid var(--border-subtle)',
       padding: '0.85rem 1.5rem'
     }}>
@@ -52,30 +51,30 @@ export default function Navbar({ currentPage, activePage, onNavigate, setActiveP
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '0.75rem',
+            gap: '0.65rem',
             cursor: 'pointer',
             background: 'none',
             border: 'none',
             padding: 0
           }}
-          aria-label="GYMFLOW Home"
+          aria-label="GYMFLOW Homepage"
         >
           <div style={{
-            width: '36px',
-            height: '36px',
-            background: 'linear-gradient(135deg, var(--neon-lime) 0%, #a3e635 100%)',
-            clipPath: 'polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)',
+            width: '32px',
+            height: '32px',
+            background: 'var(--neon-lime)',
+            borderRadius: '6px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 0 16px var(--neon-lime-glow)'
+            boxShadow: '0 2px 8px rgba(204, 255, 0, 0.25)'
           }}>
-            <Zap size={20} color="#000" strokeWidth={3} />
+            <Zap size={18} color="#08090b" strokeWidth={2.8} />
           </div>
           <span className="font-heading" style={{
-            fontSize: '1.45rem',
-            fontWeight: 900,
-            letterSpacing: '2px',
+            fontSize: '1.25rem',
+            fontWeight: 800,
+            letterSpacing: '-0.02em',
             color: 'var(--pure-white)'
           }}>
             GYM<span style={{ color: 'var(--neon-lime)' }}>FLOW</span>
@@ -83,92 +82,88 @@ export default function Navbar({ currentPage, activePage, onNavigate, setActiveP
         </button>
 
         {/* Desktop Navigation Links */}
-        <nav className="desktop-nav" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <nav className="desktop-nav" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
           <button
-            className="font-heading"
             onClick={() => navigate('landing')}
             style={{
-              background: current === 'landing' ? 'var(--neon-lime-dim)' : 'transparent',
-              color: current === 'landing' ? 'var(--neon-lime)' : 'var(--text-muted)',
+              background: current === 'landing' ? 'var(--graphite-800)' : 'transparent',
+              color: current === 'landing' ? 'var(--pure-white)' : 'var(--text-muted)',
               border: '1px solid',
-              borderColor: current === 'landing' ? 'rgba(204, 255, 0, 0.3)' : 'transparent',
-              padding: '0.5rem 0.9rem',
-              borderRadius: '6px',
+              borderColor: current === 'landing' ? 'var(--border-medium)' : 'transparent',
+              padding: '0.45rem 0.85rem',
+              borderRadius: 'var(--radius-md)',
               fontSize: '0.85rem',
-              fontWeight: 700,
+              fontWeight: 600,
               cursor: 'pointer',
-              textTransform: 'uppercase'
+              transition: 'all 0.15s ease'
             }}
           >
             Overview
           </button>
 
           <button
-            className="font-heading"
             onClick={() => navigate('sessions')}
             style={{
-              background: current === 'sessions' ? 'var(--neon-lime-dim)' : 'transparent',
-              color: current === 'sessions' ? 'var(--neon-lime)' : 'var(--text-muted)',
+              background: current === 'sessions' ? 'var(--graphite-800)' : 'transparent',
+              color: current === 'sessions' ? 'var(--pure-white)' : 'var(--text-muted)',
               border: '1px solid',
-              borderColor: current === 'sessions' ? 'rgba(204, 255, 0, 0.3)' : 'transparent',
-              padding: '0.5rem 0.9rem',
-              borderRadius: '6px',
+              borderColor: current === 'sessions' ? 'var(--border-medium)' : 'transparent',
+              padding: '0.45rem 0.85rem',
+              borderRadius: 'var(--radius-md)',
               fontSize: '0.85rem',
-              fontWeight: 700,
+              fontWeight: 600,
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               gap: '0.4rem',
-              textTransform: 'uppercase'
+              transition: 'all 0.15s ease'
             }}
           >
-            <Calendar size={15} />
+            <Calendar size={15} color={current === 'sessions' ? 'var(--neon-lime)' : 'currentColor'} />
             Schedule
           </button>
 
           {isAuthenticated && (
             <button
-              className="font-heading"
               onClick={() => navigate('bookings')}
               style={{
-                background: isPassesActive ? 'var(--neon-lime-dim)' : 'transparent',
-                color: isPassesActive ? 'var(--neon-lime)' : 'var(--text-muted)',
+                background: isPassesActive ? 'var(--graphite-800)' : 'transparent',
+                color: isPassesActive ? 'var(--pure-white)' : 'var(--text-muted)',
                 border: '1px solid',
-                borderColor: isPassesActive ? 'rgba(204, 255, 0, 0.3)' : 'transparent',
-                padding: '0.5rem 0.9rem',
-                borderRadius: '6px',
+                borderColor: isPassesActive ? 'var(--border-medium)' : 'transparent',
+                padding: '0.45rem 0.85rem',
+                borderRadius: 'var(--radius-md)',
                 fontSize: '0.85rem',
-                fontWeight: 700,
+                fontWeight: 600,
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.4rem',
-                textTransform: 'uppercase'
+                transition: 'all 0.15s ease'
               }}
             >
-              <Ticket size={15} />
+              <Ticket size={15} color={isPassesActive ? 'var(--neon-lime)' : 'currentColor'} />
               My Passes
             </button>
           )}
 
           {isAdmin && (
             <button
-              className="font-heading"
               onClick={() => navigate('admin')}
               style={{
-                background: current === 'admin' ? 'var(--neon-lime-dim)' : 'transparent',
-                color: current === 'admin' ? 'var(--neon-lime)' : 'var(--text-muted)',
+                background: current === 'admin' ? 'rgba(56, 189, 248, 0.12)' : 'transparent',
+                color: current === 'admin' ? '#38bdf8' : 'var(--text-muted)',
                 border: '1px solid',
-                borderColor: current === 'admin' ? 'rgba(204, 255, 0, 0.3)' : 'transparent',
-                padding: '0.5rem 0.9rem',
-                borderRadius: '6px',
+                borderColor: current === 'admin' ? 'rgba(56, 189, 248, 0.3)' : 'transparent',
+                padding: '0.45rem 0.85rem',
+                borderRadius: 'var(--radius-md)',
                 fontSize: '0.85rem',
-                fontWeight: 700,
+                fontWeight: 600,
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.4rem',
-                textTransform: 'uppercase'
+                transition: 'all 0.15s ease'
               }}
             >
               <Shield size={15} />
@@ -177,29 +172,42 @@ export default function Navbar({ currentPage, activePage, onNavigate, setActiveP
           )}
 
           {isAuthenticated ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginLeft: '0.5rem', borderLeft: '1px solid var(--border-subtle)', paddingLeft: '1rem' }}>
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                <User size={14} color="var(--neon-lime)" />
-                {authUser?.name}
-              </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginLeft: '0.5rem', borderLeft: '1px solid var(--border-subtle)', paddingLeft: '1rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: 'var(--obsidian-deep)', padding: '0.3rem 0.65rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
+                <User size={13} color="var(--neon-lime)" />
+                <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+                  {authUser?.name}
+                </span>
+                <span style={{ fontSize: '0.7rem', color: isAdmin ? '#38bdf8' : 'var(--text-dim)', fontWeight: 700, textTransform: 'uppercase', marginLeft: '0.2rem' }}>
+                  {isAdmin ? 'Staff' : 'Athlete'}
+                </span>
+              </div>
+              
               <button
                 onClick={handleSignOut}
                 style={{
                   background: 'none',
-                  border: 'none',
+                  border: '1px solid var(--border-subtle)',
+                  borderRadius: 'var(--radius-sm)',
                   color: 'var(--text-dim)',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.3rem',
-                  fontSize: '0.8rem',
-                  fontWeight: 600,
-                  padding: '0.4rem'
+                  padding: '0.35rem 0.5rem',
+                  transition: 'all 0.15s ease'
                 }}
                 title="Sign Out"
                 aria-label="Sign Out"
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = '#f87171';
+                  e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = 'var(--text-dim)';
+                  e.currentTarget.style.borderColor = 'var(--border-subtle)';
+                }}
               >
-                <LogOut size={16} />
+                <LogOut size={14} />
               </button>
             </div>
           ) : (
@@ -207,7 +215,7 @@ export default function Navbar({ currentPage, activePage, onNavigate, setActiveP
               className="btn-primary"
               onClick={() => navigate('login-register')}
               style={{
-                padding: '0.5rem 1.1rem',
+                padding: '0.45rem 1rem',
                 fontSize: '0.82rem',
                 marginLeft: '0.5rem'
               }}
@@ -231,7 +239,7 @@ export default function Navbar({ currentPage, activePage, onNavigate, setActiveP
           }}
           aria-label="Toggle Navigation Menu"
         >
-          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
@@ -243,18 +251,18 @@ export default function Navbar({ currentPage, activePage, onNavigate, setActiveP
           borderTop: '1px solid var(--border-subtle)',
           display: 'flex',
           flexDirection: 'column',
-          gap: '0.5rem'
+          gap: '0.4rem'
         }}>
           <button
             onClick={() => navigate('landing')}
             style={{
-              padding: '0.75rem 1rem',
-              borderRadius: '6px',
-              background: current === 'landing' ? 'var(--neon-lime-dim)' : 'transparent',
-              color: current === 'landing' ? 'var(--neon-lime)' : 'var(--text-primary)',
+              padding: '0.7rem 0.9rem',
+              borderRadius: 'var(--radius-sm)',
+              background: current === 'landing' ? 'var(--graphite-800)' : 'transparent',
+              color: current === 'landing' ? 'var(--pure-white)' : 'var(--text-primary)',
               border: 'none',
               textAlign: 'left',
-              fontWeight: 700,
+              fontWeight: 600,
               fontSize: '0.9rem'
             }}
           >
@@ -263,13 +271,13 @@ export default function Navbar({ currentPage, activePage, onNavigate, setActiveP
           <button
             onClick={() => navigate('sessions')}
             style={{
-              padding: '0.75rem 1rem',
-              borderRadius: '6px',
-              background: current === 'sessions' ? 'var(--neon-lime-dim)' : 'transparent',
-              color: current === 'sessions' ? 'var(--neon-lime)' : 'var(--text-primary)',
+              padding: '0.7rem 0.9rem',
+              borderRadius: 'var(--radius-sm)',
+              background: current === 'sessions' ? 'var(--graphite-800)' : 'transparent',
+              color: current === 'sessions' ? 'var(--pure-white)' : 'var(--text-primary)',
               border: 'none',
               textAlign: 'left',
-              fontWeight: 700,
+              fontWeight: 600,
               fontSize: '0.9rem',
               display: 'flex',
               alignItems: 'center',
@@ -282,13 +290,13 @@ export default function Navbar({ currentPage, activePage, onNavigate, setActiveP
             <button
               onClick={() => navigate('bookings')}
               style={{
-                padding: '0.75rem 1rem',
-                borderRadius: '6px',
-                background: isPassesActive ? 'var(--neon-lime-dim)' : 'transparent',
-                color: isPassesActive ? 'var(--neon-lime)' : 'var(--text-primary)',
+                padding: '0.7rem 0.9rem',
+                borderRadius: 'var(--radius-sm)',
+                background: isPassesActive ? 'var(--graphite-800)' : 'transparent',
+                color: isPassesActive ? 'var(--pure-white)' : 'var(--text-primary)',
                 border: 'none',
                 textAlign: 'left',
-                fontWeight: 700,
+                fontWeight: 600,
                 fontSize: '0.9rem',
                 display: 'flex',
                 alignItems: 'center',
@@ -302,13 +310,13 @@ export default function Navbar({ currentPage, activePage, onNavigate, setActiveP
             <button
               onClick={() => navigate('admin')}
               style={{
-                padding: '0.75rem 1rem',
-                borderRadius: '6px',
-                background: current === 'admin' ? 'var(--neon-lime-dim)' : 'transparent',
-                color: current === 'admin' ? 'var(--neon-lime)' : 'var(--text-primary)',
+                padding: '0.7rem 0.9rem',
+                borderRadius: 'var(--radius-sm)',
+                background: current === 'admin' ? 'rgba(56, 189, 248, 0.12)' : 'transparent',
+                color: current === 'admin' ? '#38bdf8' : 'var(--text-primary)',
                 border: 'none',
                 textAlign: 'left',
-                fontWeight: 700,
+                fontWeight: 600,
                 fontSize: '0.9rem',
                 display: 'flex',
                 alignItems: 'center',
@@ -322,18 +330,18 @@ export default function Navbar({ currentPage, activePage, onNavigate, setActiveP
             <button
               onClick={handleSignOut}
               style={{
-                padding: '0.75rem 1rem',
-                borderRadius: '6px',
+                padding: '0.7rem 0.9rem',
+                borderRadius: 'var(--radius-sm)',
                 background: 'rgba(239, 68, 68, 0.1)',
                 color: '#f87171',
                 border: 'none',
                 textAlign: 'left',
-                fontWeight: 700,
+                fontWeight: 600,
                 fontSize: '0.9rem',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.5rem',
-                marginTop: '0.5rem'
+                marginTop: '0.4rem'
               }}
             >
               <LogOut size={16} /> Sign Out ({authUser?.name})
@@ -343,7 +351,7 @@ export default function Navbar({ currentPage, activePage, onNavigate, setActiveP
               onClick={() => navigate('login-register')}
               className="btn-primary"
               style={{
-                padding: '0.75rem 1rem',
+                padding: '0.75rem',
                 marginTop: '0.5rem',
                 width: '100%',
                 justifyContent: 'center'
@@ -355,7 +363,6 @@ export default function Navbar({ currentPage, activePage, onNavigate, setActiveP
         </div>
       )}
 
-      {/* Inline style for responsive toggle */}
       <style>{`
         @media (max-width: 768px) {
           .desktop-nav { display: none !important; }
