@@ -8,14 +8,15 @@ A full-stack web application for booking gym slots, handling waitlists, and mana
 ---
 
 ## Design Note: Stack & Data Model (Max 10 lines)
-Built with Node.js, Express, better-sqlite3, and vanilla HTML/CSS/JavaScript with zero heavy frameworks.
+Built with Node.js, Express, better-sqlite3, Socket.IO, and a React + Vite frontend styled with modern dark/neon-lime athletic aesthetics.
 The relational SQLite schema comprises four core tables: `users`, `sessions`, `bookings`, and `waitlist_entries`.
 `users` stores member and admin credentials with bcrypt password hashes and role constraints.
 `sessions` enforces 1-hour durations, a fixed 20-seat capacity, and uniqueness on `(session_date, start_hour)`.
 `bookings` links members to sessions with unique cryptographically random 6-character check-in codes.
 `waitlist_entries` tracks queues using `created_at` timestamps to ensure first-in, first-out (FIFO) order.
 All booking insertions, cancellations, and promotions run inside SQLite transactions to eliminate race conditions.
-The frontend is a single-page app with protected client-side routes, optimistic UI, polling, and 360px responsiveness.
+Live seat counts are pushed instantly across all connected browsers using Socket.IO WebSockets and optimistic UI.
+The frontend is responsive down to 360px mobile viewports with dedicated landing, scheduling, passes, and admin pages.
 
 ---
 
@@ -88,6 +89,7 @@ Or run individually:
 - `node test/auth-test.js` — Registration, login, and authorization middleware tests
 - `node test/sessions-booking-test.js` — Booking limit, duplicate slot, and waitlist promotion tests
 - `node test/checkin-test.js` — Check-in code validity and 1-hour window tests
+- `node test/socket-test.js` — Socket.IO real-time event broadcast tests
 - `node test/frontend-test.js` — Frontend file serving and routing tests
 - `node test/e2e-test.js` — Full user journey & concurrency stress test (simultaneous bookings)
 - `node test/live-test.js` — Live production deployment API verification suite
@@ -96,6 +98,6 @@ Or run individually:
 
 ## Production Deployment
 Configured via `render.yaml` for zero-configuration deployment on Render:
-- **Build Command**: `npm install`
+- **Build Command**: `npm install && npm run build`
 - **Start Command**: `npm run seed && npm start`
 - **Database Persistence Note**: Render Free web services use ephemeral local filesystem storage. Any SQLite data stored locally in `./gym.db` may be lost when the instance restarts, redeploys, or sleeps after inactivity. The idempotent seed script (`src/seed.js`) automatically populates the required demo data (admin, members, and the full 20/20 session) whenever the database file is empty or recreated, but it cannot recover lost user registrations or bookings created during previous runtime sessions. A permanent production deployment requires a persistent database service (e.g., PostgreSQL on Supabase/Neon or a persistent disk).

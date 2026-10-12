@@ -3,6 +3,7 @@ const { db } = require('../db');
 const { authenticate } = require('../middleware/auth');
 const { generateShortCode } = require('../seed');
 const { isSessionInPast } = require('./sessions');
+const { broadcastSessionUpdate } = require('../socket');
 
 const router = express.Router();
 
@@ -90,6 +91,15 @@ router.post('/', authenticate, (req, res, next) => {
     });
 
     const booking = bookTransaction();
+
+    // Broadcast real-time availability update
+    const confirmedCount = db.prepare(`
+      SELECT COUNT(*) as count FROM bookings WHERE session_id = ? AND status = 'confirmed'
+    `).get(session_id).count;
+    broadcastSessionUpdate(session_id, {
+      confirmed_count: confirmedCount,
+      seats_remaining: Math.max(0, 20 - confirmedCount)
+    });
 
     return res.status(201).json({
       message: 'Booking confirmed',
@@ -208,6 +218,18 @@ router.post('/:id/cancel', authenticate, (req, res, next) => {
     });
 
     const result = cancelTransaction();
+
+    // Broadcast real-time availability update
+    const targetBooking = db.prepare('SELECT session_id FROM bookings WHERE id = ?').get(bookingId);
+    if (targetBooking) {
+      const confirmedCount = db.prepare(`
+        SELECT COUNT(*) as count FROM bookings WHERE session_id = ? AND status = 'confirmed'
+      `).get(targetBooking.session_id).count;
+      broadcastSessionUpdate(targetBooking.session_id, {
+        confirmed_count: confirmedCount,
+        seats_remaining: Math.max(0, 20 - confirmedCount)
+      });
+    }
 
     return res.json({
       message: 'Booking cancelled successfully',
