@@ -3,13 +3,29 @@ import { useAuth } from '../context/AuthContext';
 import { apiRequest, socket } from '../services/api';
 import { Calendar, Clock, Check, AlertCircle, RefreshCw, Zap } from 'lucide-react';
 
-export default function SessionsPage({ onNavigateToPasses, onNavigateToAuth }) {
+export default function SessionsPage({ onNavigate, onNavigateToPasses, onNavigateToAuth }) {
   const { token, isAuthenticated } = useAuth();
   const [sessions, setSessions] = useState([]);
   const [dateFilter, setDateFilter] = useState('');
   const [loading, setLoading] = useState(true);
   const [feedback, setFeedback] = useState({ type: '', message: '' });
   const [actionLoading, setActionLoading] = useState(null);
+
+  const goToPasses = () => {
+    if (typeof onNavigateToPasses === 'function') {
+      onNavigateToPasses();
+    } else if (typeof onNavigate === 'function') {
+      onNavigate('bookings');
+    }
+  };
+
+  const goToAuth = () => {
+    if (typeof onNavigateToAuth === 'function') {
+      onNavigateToAuth();
+    } else if (typeof onNavigate === 'function') {
+      onNavigate('login-register');
+    }
+  };
 
   // Load sessions from API
   const fetchSessions = async (filterDate = '') => {
@@ -53,7 +69,7 @@ export default function SessionsPage({ onNavigateToPasses, onNavigateToAuth }) {
   // Optimistic Booking with rollback
   const handleBook = async (session) => {
     if (!isAuthenticated) {
-      onNavigateToAuth();
+      goToAuth();
       return;
     }
 
@@ -86,7 +102,7 @@ export default function SessionsPage({ onNavigateToPasses, onNavigateToAuth }) {
 
   const handleJoinWaitlist = async (sessionId) => {
     if (!isAuthenticated) {
-      onNavigateToAuth();
+      goToAuth();
       return;
     }
 
@@ -121,7 +137,7 @@ export default function SessionsPage({ onNavigateToPasses, onNavigateToAuth }) {
   };
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '1.5rem' }}>
       {/* Header bar */}
       <div style={{
         display: 'flex',
@@ -137,7 +153,7 @@ export default function SessionsPage({ onNavigateToPasses, onNavigateToAuth }) {
           <div style={{ color: 'var(--neon-lime)', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '1.5px', textTransform: 'uppercase' }}>
             LIVE ARENA CAPACITY
           </div>
-          <h1 className="font-heading" style={{ fontSize: '2.4rem', fontWeight: 900, marginTop: '0.25rem' }}>
+          <h1 className="font-heading" style={{ fontSize: '2.4rem', fontWeight: 900, marginTop: '0.25rem', color: 'var(--pure-white)' }}>
             Training Sessions
           </h1>
         </div>
@@ -211,7 +227,7 @@ export default function SessionsPage({ onNavigateToPasses, onNavigateToAuth }) {
       ) : sessions.length === 0 ? (
         <div className="surface-card" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
           <Calendar size={48} color="var(--text-dim)" style={{ marginBottom: '1rem' }} />
-          <h3 className="font-heading" style={{ fontSize: '1.4rem', fontWeight: 800, marginBottom: '0.5rem' }}>
+          <h3 className="font-heading" style={{ fontSize: '1.4rem', fontWeight: 800, marginBottom: '0.5rem', color: 'var(--pure-white)' }}>
             No Sessions Found
           </h3>
           <p style={{ color: 'var(--text-muted)' }}>There are no workout slots scheduled for this specific date.</p>
@@ -228,7 +244,7 @@ export default function SessionsPage({ onNavigateToPasses, onNavigateToAuth }) {
               <div key={session.id} className="surface-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
-                    <div className="font-heading" style={{ fontSize: '1.35rem', fontWeight: 900 }}>
+                    <div className="font-heading" style={{ fontSize: '1.35rem', fontWeight: 900, color: 'var(--pure-white)' }}>
                       {session.session_date}
                     </div>
                     <span
@@ -280,20 +296,25 @@ export default function SessionsPage({ onNavigateToPasses, onNavigateToAuth }) {
                 {/* Actions */}
                 <div>
                   {session.is_booked_by_user ? (
-                    <div style={{
-                      background: 'rgba(16, 185, 129, 0.12)',
-                      border: '1px solid rgba(16, 185, 129, 0.3)',
-                      color: '#6ee7b7',
-                      padding: '0.75rem',
-                      borderRadius: '8px',
-                      textAlign: 'center',
-                      fontWeight: 800,
-                      fontSize: '0.85rem',
-                      textTransform: 'uppercase',
-                      cursor: 'pointer'
-                    }} onClick={onNavigateToPasses}>
-                      ✓ Pass Confirmed (View Code)
-                    </div>
+                    <button
+                      type="button"
+                      onClick={goToPasses}
+                      style={{
+                        width: '100%',
+                        background: 'rgba(16, 185, 129, 0.12)',
+                        border: '1px solid rgba(16, 185, 129, 0.3)',
+                        color: '#6ee7b7',
+                        padding: '0.75rem',
+                        borderRadius: '8px',
+                        textAlign: 'center',
+                        fontWeight: 800,
+                        fontSize: '0.85rem',
+                        textTransform: 'uppercase',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      ✓ Pass Confirmed (View Code) →
+                    </button>
                   ) : session.is_waitlisted_by_user ? (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                       <div style={{
@@ -310,6 +331,7 @@ export default function SessionsPage({ onNavigateToPasses, onNavigateToAuth }) {
                         ⏳ On Priority Waitlist
                       </div>
                       <button
+                        type="button"
                         className="btn-danger"
                         disabled={actionLoading === session.id}
                         onClick={() => handleLeaveWaitlist(session.id)}
@@ -320,6 +342,7 @@ export default function SessionsPage({ onNavigateToPasses, onNavigateToAuth }) {
                     </div>
                   ) : !isFull ? (
                     <button
+                      type="button"
                       className="btn-primary"
                       disabled={actionLoading === session.id}
                       onClick={() => handleBook(session)}
@@ -329,6 +352,7 @@ export default function SessionsPage({ onNavigateToPasses, onNavigateToAuth }) {
                     </button>
                   ) : (
                     <button
+                      type="button"
                       className="btn-secondary"
                       disabled={actionLoading === session.id}
                       onClick={() => handleJoinWaitlist(session.id)}

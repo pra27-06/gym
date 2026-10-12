@@ -1,39 +1,64 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Zap, Calendar, Ticket, Shield, LogOut, User } from 'lucide-react';
+import { Zap, Calendar, Ticket, Shield, LogOut, User, Menu, X } from 'lucide-react';
 
-export default function Navbar({ activePage, setActivePage }) {
-  const { user, isAuthenticated, isAdmin, logout } = useAuth();
+export default function Navbar({ currentPage, activePage, onNavigate, setActivePage, onLogout }) {
+  const { user: authUser, isAuthenticated, isAdmin, logout } = useAuth();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const navigate = (page) => {
+    setMobileMenuOpen(false);
+    if (typeof onNavigate === 'function') {
+      onNavigate(page);
+    } else if (typeof setActivePage === 'function') {
+      setActivePage(page);
+    }
+  };
+
+  const handleSignOut = () => {
+    setMobileMenuOpen(false);
+    if (typeof onLogout === 'function') {
+      onLogout();
+    } else if (typeof logout === 'function') {
+      logout();
+    }
+    navigate('landing');
+  };
+
+  const current = currentPage || activePage || 'landing';
+  const isPassesActive = current === 'bookings' || current === 'my-bookings';
+  const isAuthActive = current === 'login-register' || current === 'auth';
 
   return (
     <header style={{
       position: 'sticky',
       top: 0,
       zIndex: 100,
-      backgroundColor: 'rgba(13, 15, 20, 0.92)',
+      backgroundColor: 'rgba(13, 15, 20, 0.95)',
       backdropFilter: 'blur(16px)',
       borderBottom: '1px solid var(--border-subtle)',
-      padding: '1rem 2rem'
+      padding: '0.85rem 1.5rem'
     }}>
       <div style={{
         maxWidth: '1200px',
         margin: '0 auto',
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-        gap: '1rem'
+        alignItems: 'center'
       }}>
         {/* Brand */}
-        <div 
-          onClick={() => setActivePage('landing')}
+        <button
+          onClick={() => navigate('landing')}
           style={{
             display: 'flex',
             alignItems: 'center',
             gap: '0.75rem',
             cursor: 'pointer',
-            userSelect: 'none'
+            background: 'none',
+            border: 'none',
+            padding: 0
           }}
+          aria-label="GYMFLOW Home"
         >
           <div style={{
             width: '36px',
@@ -55,19 +80,19 @@ export default function Navbar({ activePage, setActivePage }) {
           }}>
             GYM<span style={{ color: 'var(--neon-lime)' }}>FLOW</span>
           </span>
-        </div>
+        </button>
 
-        {/* Navigation items */}
-        <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-          <button 
+        {/* Desktop Navigation Links */}
+        <nav className="desktop-nav" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <button
             className="font-heading"
-            onClick={() => setActivePage('landing')}
+            onClick={() => navigate('landing')}
             style={{
-              background: activePage === 'landing' ? 'var(--neon-lime-dim)' : 'transparent',
-              color: activePage === 'landing' ? 'var(--neon-lime)' : 'var(--text-muted)',
+              background: current === 'landing' ? 'var(--neon-lime-dim)' : 'transparent',
+              color: current === 'landing' ? 'var(--neon-lime)' : 'var(--text-muted)',
               border: '1px solid',
-              borderColor: activePage === 'landing' ? 'rgba(204, 255, 0, 0.3)' : 'transparent',
-              padding: '0.5rem 1rem',
+              borderColor: current === 'landing' ? 'rgba(204, 255, 0, 0.3)' : 'transparent',
+              padding: '0.5rem 0.9rem',
               borderRadius: '6px',
               fontSize: '0.85rem',
               fontWeight: 700,
@@ -78,15 +103,15 @@ export default function Navbar({ activePage, setActivePage }) {
             Overview
           </button>
 
-          <button 
+          <button
             className="font-heading"
-            onClick={() => setActivePage('sessions')}
+            onClick={() => navigate('sessions')}
             style={{
-              background: activePage === 'sessions' ? 'var(--neon-lime-dim)' : 'transparent',
-              color: activePage === 'sessions' ? 'var(--neon-lime)' : 'var(--text-muted)',
+              background: current === 'sessions' ? 'var(--neon-lime-dim)' : 'transparent',
+              color: current === 'sessions' ? 'var(--neon-lime)' : 'var(--text-muted)',
               border: '1px solid',
-              borderColor: activePage === 'sessions' ? 'rgba(204, 255, 0, 0.3)' : 'transparent',
-              padding: '0.5rem 1rem',
+              borderColor: current === 'sessions' ? 'rgba(204, 255, 0, 0.3)' : 'transparent',
+              padding: '0.5rem 0.9rem',
               borderRadius: '6px',
               fontSize: '0.85rem',
               fontWeight: 700,
@@ -102,15 +127,15 @@ export default function Navbar({ activePage, setActivePage }) {
           </button>
 
           {isAuthenticated && (
-            <button 
+            <button
               className="font-heading"
-              onClick={() => setActivePage('my-bookings')}
+              onClick={() => navigate('bookings')}
               style={{
-                background: activePage === 'my-bookings' ? 'var(--neon-lime-dim)' : 'transparent',
-                color: activePage === 'my-bookings' ? 'var(--neon-lime)' : 'var(--text-muted)',
+                background: isPassesActive ? 'var(--neon-lime-dim)' : 'transparent',
+                color: isPassesActive ? 'var(--neon-lime)' : 'var(--text-muted)',
                 border: '1px solid',
-                borderColor: activePage === 'my-bookings' ? 'rgba(204, 255, 0, 0.3)' : 'transparent',
-                padding: '0.5rem 1rem',
+                borderColor: isPassesActive ? 'rgba(204, 255, 0, 0.3)' : 'transparent',
+                padding: '0.5rem 0.9rem',
                 borderRadius: '6px',
                 fontSize: '0.85rem',
                 fontWeight: 700,
@@ -127,15 +152,15 @@ export default function Navbar({ activePage, setActivePage }) {
           )}
 
           {isAdmin && (
-            <button 
+            <button
               className="font-heading"
-              onClick={() => setActivePage('admin')}
+              onClick={() => navigate('admin')}
               style={{
-                background: activePage === 'admin' ? 'var(--neon-lime-dim)' : 'transparent',
-                color: activePage === 'admin' ? 'var(--neon-lime)' : 'var(--text-muted)',
+                background: current === 'admin' ? 'var(--neon-lime-dim)' : 'transparent',
+                color: current === 'admin' ? 'var(--neon-lime)' : 'var(--text-muted)',
                 border: '1px solid',
-                borderColor: activePage === 'admin' ? 'rgba(204, 255, 0, 0.3)' : 'transparent',
-                padding: '0.5rem 1rem',
+                borderColor: current === 'admin' ? 'rgba(204, 255, 0, 0.3)' : 'transparent',
+                padding: '0.5rem 0.9rem',
                 borderRadius: '6px',
                 fontSize: '0.85rem',
                 fontWeight: 700,
@@ -155,10 +180,10 @@ export default function Navbar({ activePage, setActivePage }) {
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginLeft: '0.5rem', borderLeft: '1px solid var(--border-subtle)', paddingLeft: '1rem' }}>
               <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
                 <User size={14} color="var(--neon-lime)" />
-                {user?.name}
+                {authUser?.name}
               </span>
-              <button 
-                onClick={logout}
+              <button
+                onClick={handleSignOut}
                 style={{
                   background: 'none',
                   border: 'none',
@@ -168,24 +193,175 @@ export default function Navbar({ activePage, setActivePage }) {
                   alignItems: 'center',
                   gap: '0.3rem',
                   fontSize: '0.8rem',
-                  fontWeight: 600
+                  fontWeight: 600,
+                  padding: '0.4rem'
                 }}
                 title="Sign Out"
+                aria-label="Sign Out"
               >
-                <LogOut size={14} />
+                <LogOut size={16} />
               </button>
             </div>
           ) : (
-            <button 
+            <button
               className="btn-primary"
-              onClick={() => setActivePage('auth')}
-              style={{ padding: '0.5rem 1.1rem', fontSize: '0.82rem', marginLeft: '0.5rem' }}
+              onClick={() => navigate('login-register')}
+              style={{
+                padding: '0.5rem 1.1rem',
+                fontSize: '0.82rem',
+                marginLeft: '0.5rem'
+              }}
             >
               Sign In
             </button>
           )}
         </nav>
+
+        {/* Mobile Hamburger Button */}
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="mobile-toggle-btn"
+          style={{
+            display: 'none',
+            background: 'none',
+            border: 'none',
+            color: 'var(--pure-white)',
+            padding: '0.4rem',
+            cursor: 'pointer'
+          }}
+          aria-label="Toggle Navigation Menu"
+        >
+          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
       </div>
+
+      {/* Mobile Drawer */}
+      {mobileMenuOpen && (
+        <div style={{
+          marginTop: '1rem',
+          paddingTop: '1rem',
+          borderTop: '1px solid var(--border-subtle)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '0.5rem'
+        }}>
+          <button
+            onClick={() => navigate('landing')}
+            style={{
+              padding: '0.75rem 1rem',
+              borderRadius: '6px',
+              background: current === 'landing' ? 'var(--neon-lime-dim)' : 'transparent',
+              color: current === 'landing' ? 'var(--neon-lime)' : 'var(--text-primary)',
+              border: 'none',
+              textAlign: 'left',
+              fontWeight: 700,
+              fontSize: '0.9rem'
+            }}
+          >
+            Overview
+          </button>
+          <button
+            onClick={() => navigate('sessions')}
+            style={{
+              padding: '0.75rem 1rem',
+              borderRadius: '6px',
+              background: current === 'sessions' ? 'var(--neon-lime-dim)' : 'transparent',
+              color: current === 'sessions' ? 'var(--neon-lime)' : 'var(--text-primary)',
+              border: 'none',
+              textAlign: 'left',
+              fontWeight: 700,
+              fontSize: '0.9rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem'
+            }}
+          >
+            <Calendar size={16} /> Schedule
+          </button>
+          {isAuthenticated && (
+            <button
+              onClick={() => navigate('bookings')}
+              style={{
+                padding: '0.75rem 1rem',
+                borderRadius: '6px',
+                background: isPassesActive ? 'var(--neon-lime-dim)' : 'transparent',
+                color: isPassesActive ? 'var(--neon-lime)' : 'var(--text-primary)',
+                border: 'none',
+                textAlign: 'left',
+                fontWeight: 700,
+                fontSize: '0.9rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}
+            >
+              <Ticket size={16} /> My Passes
+            </button>
+          )}
+          {isAdmin && (
+            <button
+              onClick={() => navigate('admin')}
+              style={{
+                padding: '0.75rem 1rem',
+                borderRadius: '6px',
+                background: current === 'admin' ? 'var(--neon-lime-dim)' : 'transparent',
+                color: current === 'admin' ? 'var(--neon-lime)' : 'var(--text-primary)',
+                border: 'none',
+                textAlign: 'left',
+                fontWeight: 700,
+                fontSize: '0.9rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}
+            >
+              <Shield size={16} /> Admin Hub
+            </button>
+          )}
+          {isAuthenticated ? (
+            <button
+              onClick={handleSignOut}
+              style={{
+                padding: '0.75rem 1rem',
+                borderRadius: '6px',
+                background: 'rgba(239, 68, 68, 0.1)',
+                color: '#f87171',
+                border: 'none',
+                textAlign: 'left',
+                fontWeight: 700,
+                fontSize: '0.9rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                marginTop: '0.5rem'
+              }}
+            >
+              <LogOut size={16} /> Sign Out ({authUser?.name})
+            </button>
+          ) : (
+            <button
+              onClick={() => navigate('login-register')}
+              className="btn-primary"
+              style={{
+                padding: '0.75rem 1rem',
+                marginTop: '0.5rem',
+                width: '100%',
+                justifyContent: 'center'
+              }}
+            >
+              Sign In
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* Inline style for responsive toggle */}
+      <style>{`
+        @media (max-width: 768px) {
+          .desktop-nav { display: none !important; }
+          .mobile-toggle-btn { display: block !important; }
+        }
+      `}</style>
     </header>
   );
 }

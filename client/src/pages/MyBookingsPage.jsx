@@ -2,12 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import { Ticket, Calendar, Clock, CheckCircle2, XCircle, AlertTriangle, ArrowRight, ShieldCheck } from 'lucide-react';
 
-export default function MyBookingsPage({ onNavigate }) {
+export default function MyBookingsPage({ onNavigate, setActivePage }) {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [feedback, setFeedback] = useState(null);
   const [cancellingId, setCancellingId] = useState(null);
   const [cancelModalBooking, setCancelModalBooking] = useState(null);
+
+  const navigate = (page) => {
+    if (typeof onNavigate === 'function') onNavigate(page);
+    else if (typeof setActivePage === 'function') setActivePage(page);
+  };
 
   const fetchBookings = async () => {
     try {
@@ -65,7 +70,7 @@ export default function MyBookingsPage({ onNavigate }) {
         </div>
 
         <button
-          onClick={() => onNavigate('sessions')}
+          onClick={() => navigate('sessions')}
           className="btn-outline-hover"
           style={{
             display: 'inline-flex',
@@ -126,7 +131,7 @@ export default function MyBookingsPage({ onNavigate }) {
             You haven't reserved any gym slots yet. Browse our daily schedule to secure a session.
           </p>
           <button
-            onClick={() => onNavigate('sessions')}
+            onClick={() => navigate('sessions')}
             className="neon-button"
             style={{
               padding: '0.85rem 1.75rem',
@@ -253,14 +258,6 @@ export default function MyBookingsPage({ onNavigate }) {
                       transition: 'all 0.2s ease',
                       marginTop: '0.5rem'
                     }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = 'rgba(255,59,48,0.2)';
-                      e.currentTarget.style.borderColor = 'var(--status-crimson)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = 'rgba(255,59,48,0.1)';
-                      e.currentTarget.style.borderColor = 'rgba(255,59,48,0.25)';
-                    }}
                   >
                     {cancellingId === b.id ? 'Cancelling...' : 'Cancel Reservation'}
                   </button>
@@ -313,6 +310,7 @@ export default function MyBookingsPage({ onNavigate }) {
 
             <div style={{ display: 'flex', gap: '0.75rem' }}>
               <button
+                type="button"
                 onClick={() => setCancelModalBooking(null)}
                 style={{
                   flex: 1,
@@ -329,6 +327,7 @@ export default function MyBookingsPage({ onNavigate }) {
                 Keep Pass
               </button>
               <button
+                type="button"
                 onClick={handleCancel}
                 style={{
                   flex: 1,

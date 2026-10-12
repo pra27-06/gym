@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { apiRequest } from '../services/api';
-import { ArrowRight, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, AlertCircle, CheckCircle2, UserCheck, Shield } from 'lucide-react';
 
 export default function AuthPage({ onSuccess }) {
   const [tab, setTab] = useState('login'); // 'login' or 'register'
@@ -27,11 +27,13 @@ export default function AuthPage({ onSuccess }) {
 
     try {
       const res = await apiRequest('/api/auth/login', 'POST', {
-        email: loginEmail,
+        email: loginEmail.trim(),
         password: loginPassword
       });
       login(res.token, res.user);
-      onSuccess(res.user.role === 'admin' ? 'admin' : 'sessions');
+      if (typeof onSuccess === 'function') {
+        onSuccess(res.user);
+      }
     } catch (err) {
       setError(err.message || 'Invalid email or password');
     } finally {
@@ -52,17 +54,26 @@ export default function AuthPage({ onSuccess }) {
     setLoading(true);
     try {
       const res = await apiRequest('/api/auth/register', 'POST', {
-        name: regName,
-        email: regEmail,
+        name: regName.trim(),
+        email: regEmail.trim(),
         password: regPassword
       });
       login(res.token, res.user);
-      onSuccess('sessions');
+      if (typeof onSuccess === 'function') {
+        onSuccess(res.user);
+      }
     } catch (err) {
       setError(err.message || 'Registration failed');
     } finally {
       setLoading(false);
     }
+  };
+
+  const fillDemo = (email, pass) => {
+    setTab('login');
+    setLoginEmail(email);
+    setLoginPassword(pass);
+    setError('');
   };
 
   return (
@@ -98,62 +109,124 @@ export default function AuthPage({ onSuccess }) {
           </p>
         </div>
 
+        {/* Quick Demo Credentials Panel */}
         <div style={{
-          marginTop: '3rem',
-          paddingTop: '1.5rem',
-          borderTop: '1px solid rgba(255, 255, 255, 0.15)',
-          fontSize: '0.82rem',
-          color: 'var(--text-muted)'
+          marginTop: '2rem',
+          background: 'rgba(18, 21, 28, 0.85)',
+          backdropFilter: 'blur(10px)',
+          border: '1px solid var(--border-subtle)',
+          borderRadius: '12px',
+          padding: '1.25rem'
         }}>
-          <strong>Demo Credentials:</strong><br />
-          Admin: <code>admin@gym.com</code> / <code>password123</code><br />
-          Member: <code>alice@gym.com</code> / <code>password123</code>
+          <div style={{ fontSize: '0.75rem', fontWeight: 800, letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '0.75rem' }}>
+            One-Click Demo Credentials
+          </div>
+          <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              onClick={() => fillDemo('alice@gym.com', 'password123')}
+              style={{
+                flex: 1,
+                minWidth: '130px',
+                padding: '0.5rem 0.75rem',
+                borderRadius: '6px',
+                background: 'rgba(204, 255, 0, 0.1)',
+                border: '1px solid rgba(204, 255, 0, 0.3)',
+                color: 'var(--neon-lime)',
+                fontSize: '0.78rem',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.35rem'
+              }}
+            >
+              <UserCheck size={14} /> Member (Alice)
+            </button>
+
+            <button
+              type="button"
+              onClick={() => fillDemo('admin@gym.com', 'password123')}
+              style={{
+                flex: 1,
+                minWidth: '130px',
+                padding: '0.5rem 0.75rem',
+                borderRadius: '6px',
+                background: 'rgba(56, 189, 248, 0.1)',
+                border: '1px solid rgba(56, 189, 248, 0.3)',
+                color: '#38bdf8',
+                fontSize: '0.78rem',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.35rem'
+              }}
+            >
+              <Shield size={14} /> Staff (Admin)
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Right Form Panel */}
-      <div style={{ padding: '3.5rem 3rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-        {/* Tab switcher */}
-        <div style={{ display: 'flex', gap: '1.5rem', borderBottom: '1px solid var(--border-subtle)', marginBottom: '2rem' }}>
+      {/* Right Form Container */}
+      <div style={{ padding: '3.5rem 3rem' }}>
+        {/* Tab switchers */}
+        <div style={{
+          display: 'flex',
+          background: 'var(--obsidian)',
+          padding: '0.35rem',
+          borderRadius: '10px',
+          border: '1px solid var(--border-subtle)',
+          marginBottom: '2rem'
+        }}>
           <button
-            className="font-heading"
+            type="button"
             onClick={() => { setTab('login'); setError(''); }}
             style={{
-              background: 'none',
+              flex: 1,
+              padding: '0.65rem',
+              borderRadius: '7px',
               border: 'none',
-              color: tab === 'login' ? 'var(--pure-white)' : 'var(--text-dim)',
-              fontSize: '1rem',
+              background: tab === 'login' ? 'var(--graphite-800)' : 'transparent',
+              color: tab === 'login' ? 'var(--pure-white)' : 'var(--text-muted)',
+              fontFamily: 'var(--font-heading)',
               fontWeight: 800,
-              letterSpacing: '1px',
+              fontSize: '0.85rem',
+              letterSpacing: '0.8px',
               textTransform: 'uppercase',
-              padding: '0.75rem 0',
               cursor: 'pointer',
-              borderBottom: tab === 'login' ? '2px solid var(--neon-lime)' : '2px solid transparent'
+              transition: 'all 0.2s'
             }}
           >
             Sign In
           </button>
           <button
-            className="font-heading"
+            type="button"
             onClick={() => { setTab('register'); setError(''); }}
             style={{
-              background: 'none',
+              flex: 1,
+              padding: '0.65rem',
+              borderRadius: '7px',
               border: 'none',
-              color: tab === 'register' ? 'var(--pure-white)' : 'var(--text-dim)',
-              fontSize: '1rem',
+              background: tab === 'register' ? 'var(--graphite-800)' : 'transparent',
+              color: tab === 'register' ? 'var(--pure-white)' : 'var(--text-muted)',
+              fontFamily: 'var(--font-heading)',
               fontWeight: 800,
-              letterSpacing: '1px',
+              fontSize: '0.85rem',
+              letterSpacing: '0.8px',
               textTransform: 'uppercase',
-              padding: '0.75rem 0',
               cursor: 'pointer',
-              borderBottom: tab === 'register' ? '2px solid var(--neon-lime)' : '2px solid transparent'
+              transition: 'all 0.2s'
             }}
           >
             Register
           </button>
         </div>
 
-        {/* Feedback states */}
+        {/* Feedback error alert */}
         {error && (
           <div style={{
             background: 'rgba(239, 68, 68, 0.12)',

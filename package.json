@@ -8,7 +8,7 @@
     "seed": "node src/seed.js",
     "seed:force": "node src/seed.js --force",
     "build": "vite build",
-    "test": "node src/seed.js --force && node test/db-test.js && node test/auth-test.js && node test/sessions-booking-test.js && node test/checkin-test.js && node test/socket-test.js && node test/frontend-test.js && node test/e2e-test.js"
+    "test": "node src/seed.js --force && node test/db-test.js && node test/auth-test.js && node test/sessions-booking-test.js && node test/checkin-test.js && node test/socket-test.js && node test/frontend-test.js && node test/ui-functionality-test.js && node test/e2e-test.js"
   },
   "keywords": [],
   "author": "",

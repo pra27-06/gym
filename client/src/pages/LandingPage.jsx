@@ -1,9 +1,25 @@
 import React from 'react';
-import { ArrowRight, CheckCircle2, Users, Clock, ShieldCheck, Zap } from 'lucide-react';
+import { ArrowRight, Users, Clock, ShieldCheck, Zap, Sparkles } from 'lucide-react';
 
-export default function LandingPage({ onExploreSessions, onOpenAuth }) {
+export default function LandingPage({ onNavigate, onExploreSessions, onOpenAuth }) {
+  const handleGoSessions = () => {
+    if (typeof onExploreSessions === 'function') {
+      onExploreSessions();
+    } else if (typeof onNavigate === 'function') {
+      onNavigate('sessions');
+    }
+  };
+
+  const handleGoAuth = () => {
+    if (typeof onOpenAuth === 'function') {
+      onOpenAuth();
+    } else if (typeof onNavigate === 'function') {
+      onNavigate('login-register');
+    }
+  };
+
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '1.5rem' }}>
       {/* Hero Section */}
       <section style={{
         position: 'relative',
@@ -65,14 +81,14 @@ export default function LandingPage({ onExploreSessions, onOpenAuth }) {
             maxWidth: '620px'
           }}>
             High-performance workout sessions capped strictly at 20 athletes. 
-            Real-time live occupancy, instant waitlist promotions, and biometric-ready turnstile check-ins.
+            Real-time live occupancy, instant FIFO waitlist promotions, and biometric-ready turnstile check-ins.
           </p>
 
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-            <button className="btn-primary" onClick={onExploreSessions} style={{ padding: '1rem 2rem', fontSize: '0.95rem' }}>
+            <button className="btn-primary" onClick={handleGoSessions} style={{ padding: '1rem 2rem', fontSize: '0.95rem' }}>
               Book Your Session <ArrowRight size={18} />
             </button>
-            <button className="btn-secondary" onClick={onOpenAuth} style={{ padding: '1rem 2rem', fontSize: '0.95rem' }}>
+            <button className="btn-secondary" onClick={handleGoAuth} style={{ padding: '1rem 2rem', fontSize: '0.95rem' }}>
               Athlete Portal
             </button>
           </div>
@@ -120,7 +136,7 @@ export default function LandingPage({ onExploreSessions, onOpenAuth }) {
           <div style={{ color: 'var(--neon-lime)', fontWeight: 800, letterSpacing: '2px', textTransform: 'uppercase', fontSize: '0.85rem' }}>
             ENGINEERED FOR PEAK ATHLETES
           </div>
-          <h2 className="font-heading" style={{ fontSize: '2.4rem', fontWeight: 900, marginTop: '0.5rem' }}>
+          <h2 className="font-heading" style={{ fontSize: '2.4rem', fontWeight: 900, marginTop: '0.5rem', color: 'var(--pure-white)' }}>
             Built to Eliminate Friction at the Door
           </h2>
         </div>
@@ -130,7 +146,7 @@ export default function LandingPage({ onExploreSessions, onOpenAuth }) {
             <div style={{ width: '48px', height: '48px', borderRadius: '10px', background: 'var(--neon-lime-dim)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
               <Users size={24} color="var(--neon-lime)" />
             </div>
-            <h3 className="font-heading" style={{ fontSize: '1.3rem', fontWeight: 800, marginBottom: '0.75rem' }}>
+            <h3 className="font-heading" style={{ fontSize: '1.3rem', fontWeight: 800, marginBottom: '0.75rem', color: 'var(--pure-white)' }}>
               Concurrency-Safe Booking
             </h3>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>
@@ -142,7 +158,7 @@ export default function LandingPage({ onExploreSessions, onOpenAuth }) {
             <div style={{ width: '48px', height: '48px', borderRadius: '10px', background: 'rgba(56, 189, 248, 0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
               <Clock size={24} color="#38bdf8" />
             </div>
-            <h3 className="font-heading" style={{ fontSize: '1.3rem', fontWeight: 800, marginBottom: '0.75rem' }}>
+            <h3 className="font-heading" style={{ fontSize: '1.3rem', fontWeight: 800, marginBottom: '0.75rem', color: 'var(--pure-white)' }}>
               Automatic FIFO Waitlist
             </h3>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>
@@ -154,7 +170,7 @@ export default function LandingPage({ onExploreSessions, onOpenAuth }) {
             <div style={{ width: '48px', height: '48px', borderRadius: '10px', background: 'rgba(168, 85, 247, 0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
               <ShieldCheck size={24} color="#a855f7" />
             </div>
-            <h3 className="font-heading" style={{ fontSize: '1.3rem', fontWeight: 800, marginBottom: '0.75rem' }}>
+            <h3 className="font-heading" style={{ fontSize: '1.3rem', fontWeight: 800, marginBottom: '0.75rem', color: 'var(--pure-white)' }}>
               Turnstile Code Security
             </h3>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>
@@ -172,47 +188,56 @@ export default function LandingPage({ onExploreSessions, onOpenAuth }) {
         padding: '3rem 2rem',
         marginBottom: '4rem'
       }}>
-        <h2 className="font-heading" style={{ fontSize: '1.8rem', fontWeight: 900, marginBottom: '2rem', textAlign: 'center' }}>
+        <h2 className="font-heading" style={{ fontSize: '1.8rem', fontWeight: 900, marginBottom: '2rem', textAlign: 'center', color: 'var(--pure-white)' }}>
           Three Simple Steps to Workout
         </h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '2rem' }}>
           <div>
             <div className="font-mono" style={{ color: 'var(--neon-lime)', fontSize: '1.8rem', fontWeight: 900 }}>01</div>
-            <h4 className="font-heading" style={{ fontSize: '1.15rem', fontWeight: 800, margin: '0.5rem 0' }}>Select Your Slot</h4>
+            <h4 className="font-heading" style={{ fontSize: '1.15rem', fontWeight: 800, margin: '0.5rem 0', color: 'var(--pure-white)' }}>Select Your Slot</h4>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Browse upcoming daily sessions and check real-time availability gauges.</p>
           </div>
           <div>
             <div className="font-mono" style={{ color: 'var(--neon-lime)', fontSize: '1.8rem', fontWeight: 900 }}>02</div>
-            <h4 className="font-heading" style={{ fontSize: '1.15rem', fontWeight: 800, margin: '0.5rem 0' }}>Instant Pass Generation</h4>
+            <h4 className="font-heading" style={{ fontSize: '1.15rem', fontWeight: 800, margin: '0.5rem 0', color: 'var(--pure-white)' }}>Instant Pass Generation</h4>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Receive your unique 6-character turnstile pass in your athlete dashboard.</p>
           </div>
           <div>
             <div className="font-mono" style={{ color: 'var(--neon-lime)', fontSize: '1.8rem', fontWeight: 900 }}>03</div>
-            <h4 className="font-heading" style={{ fontSize: '1.15rem', fontWeight: 800, margin: '0.5rem 0' }}>Show Code & Train</h4>
+            <h4 className="font-heading" style={{ fontSize: '1.15rem', fontWeight: 800, margin: '0.5rem 0', color: 'var(--pure-white)' }}>Show Code & Train</h4>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Front desk staff validates your code during the session hour and checks you in.</p>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer style={{
-        borderTop: '1px solid var(--border-subtle)',
-        padding: '2.5rem 0 4rem',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-        gap: '1.5rem',
-        color: 'var(--text-dim)',
-        fontSize: '0.85rem'
+      {/* Direct Call to Action Banner */}
+      <section style={{
+        background: 'linear-gradient(135deg, var(--graphite-900) 0%, #151821 100%)',
+        border: '1px solid rgba(204, 255, 0, 0.25)',
+        borderRadius: '16px',
+        padding: '3rem 2rem',
+        textAlign: 'center',
+        marginBottom: '3rem',
+        boxShadow: '0 16px 36px rgba(0, 0, 0, 0.4)'
       }}>
-        <div>© 2026 GYMFLOW. High-Performance Athletic Booking System.</div>
-        <div style={{ display: 'flex', gap: '1.5rem' }}>
-          <span>Strict 20-Cap Policy</span>
-          <span>WebSocket Real-Time Sync</span>
-          <span>SQLite Relational Engine</span>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', color: 'var(--neon-lime)', fontWeight: 800, fontSize: '0.8rem', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '0.75rem' }}>
+          <Sparkles size={16} /> ARENA ACCESS READY
         </div>
-      </footer>
+        <h2 className="font-heading" style={{ fontSize: '2.2rem', fontWeight: 900, color: 'var(--pure-white)', marginBottom: '1rem' }}>
+          Ready to Train Without Overcrowding?
+        </h2>
+        <p style={{ color: 'var(--text-muted)', maxWidth: '540px', margin: '0 auto 2rem auto', fontSize: '1rem' }}>
+          Join GYMFLOW today to book your dedicated 60-minute training slot or view upcoming schedules.
+        </p>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+          <button className="btn-primary" onClick={handleGoSessions} style={{ padding: '0.9rem 1.8rem' }}>
+            View Live Schedule <ArrowRight size={18} />
+          </button>
+          <button className="btn-secondary" onClick={handleGoAuth} style={{ padding: '0.9rem 1.8rem' }}>
+            Sign In / Register
+          </button>
+        </div>
+      </section>
     </div>
   );
 }
